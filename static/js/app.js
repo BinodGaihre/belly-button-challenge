@@ -18,8 +18,8 @@ function buildMetadata(sample) {
     // tags for each key-value in the filtered metadata.
     data_keys = Object.keys(filtered_metadata);
     data_values = Object.values(filtered_metadata);
-    for (let i = 0; i <= data_keys.length; i++){
-      select_panel.append("p").text(`${data_keys[i]}: ${data_values[i]}`)
+    for (let i = 0; i < data_keys.length; i++){
+      select_panel.append("p").text(`${data_keys[i].toUpperCase()} : ${data_values[i]}`)
     };
   });
 };
@@ -46,7 +46,8 @@ function buildCharts(sample) {
       mode: 'markers',
       marker: {
         size: sample_values_value,
-        color: otu_ids_value
+        color: otu_ids_value,
+        colorscale : 'Rainbow'
       }
     };
     
@@ -54,11 +55,18 @@ function buildCharts(sample) {
     
     var layout1 = {
       title: "Bacteria Cultures Per Sample",
-      xaxis : {title: "OTU ID"}
+      xaxis : {title: "OTU ID"},
+      yaxis : {title: "Number of Bacteria"},
+      margin: {
+        l: 100,
+        r: 50,
+        t: 50,
+        b: 50
+      }
+
     };
     
     Plotly.newPlot('bubble', data1, layout1);
-    
 
     // Render the Bubble Chart
 
@@ -73,6 +81,9 @@ function buildCharts(sample) {
       x: sample_values_value.slice(0,10).reverse(),
       y: otu_ids_value.slice(0,10).map(id => `OTU ${id}`).reverse(),
       text: yticks,
+      marker: {
+        color : 'red'
+      },
       type: "bar",
       orientation: "h"
     };
@@ -82,12 +93,13 @@ function buildCharts(sample) {
     
     // Apply a title to the layout
     let layout2 = {
-      title: "top 10 values",
+      title: "Top 10 Bacteria Cultures Found",
+      xaxis : {title: "Number of Bacteria"},
       margin: {
-        l: 150,
-        r: 10,
-        t: 30,
-        b: 30
+        l: 100,
+        r: 50,
+        t: 50,
+        b: 50
       }
     };
     
@@ -111,12 +123,11 @@ function init() {
     // Hint: Inside a loop, you will need to use d3 to append a new
     // option for each sample name.
     
-    for (let j=0; j<=names_field.length; j++){
+    for (let j=0; j<names_field.length; j++){
       dropdownMenu.append("option").text(names_field[j]).attr("value",names_field[j]);
     };
     // Get the first sample from the list
     first_sample = names_field[0];
-
     // Build charts and metadata panel with the first sample
     buildCharts(first_sample);
     buildMetadata(first_sample);
