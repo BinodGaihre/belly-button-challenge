@@ -69,11 +69,12 @@ function buildCharts(sample) {
     Plotly.newPlot('bubble', data1, layout1);
 
     // Building a Bar Chart
-    yticks = otu_ids_value.slice(0, 10).reverse();
+    yticks = otu_ids_value.slice(0, 10).map(id => `OTU ${id}`).reverse();
+    tool_label = otu_labels_value.slice(0,10).reverse();
     let trace2 = {
       x: sample_values_value.slice(0,10).reverse(),
-      y: otu_ids_value.slice(0,10).map(id => `OTU ${id}`).reverse(),
-      text: yticks,
+      y: yticks,
+      text: tool_label,
       marker: {
         color : 'red'
       },
